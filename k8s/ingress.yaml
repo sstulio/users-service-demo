@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: users-service-demo-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
+    nginx.ingress.kubernetes.io/proxy-body-size: 8m
+spec:
+  tls:
+    - hosts:
+        - users-service-demo.techtalk.tuliodesouza.com
+      secretName: users-service-demo-production-tls
+  rules:
+    - host: "users-service-demo.techtalk.tuliodesouza.com"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: users-service-demo-svc
+                port:
+                  number: 80
+
+

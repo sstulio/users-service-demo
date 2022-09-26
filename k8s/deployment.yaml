@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-service-demo
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: users-service-demo
+  template:
+    metadata:
+      name: users-service-demo-1.0
+      labels:
+        app: users-service-demo
+    spec:
+      containers:
+        - image: sstulio/users-service-demo
+          name: users-service-demo
+          ports:
+            - containerPort: 8080
+              name: port
+          env:
+            - name: DATABASE_DNS
+              valueFrom:
+                secretKeyRef:
+                  name: users-service-demo-secrets
+                  key: DATABASE_DNS
+                  optional: false
